@@ -35,15 +35,15 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
- codex/enable-android.useandroidx-property-6kg9c5
+ codex/enable-android.useandroidx-property-7yh3y0
 
-codex/enable-android.useandroidx-property-6awhbj
 
 
  main
 
-
-    kotlinOptions { jvmTarget = "17" }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
 
     packaging {
         resources.excludes += setOf("META-INF/AL2.0", "META-INF/LGPL2.1")

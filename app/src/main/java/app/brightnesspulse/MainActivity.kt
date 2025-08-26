@@ -37,6 +37,10 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (android.os.Build.VERSION.SDK_INT >= 33) {
+        requestPermissions(arrayOf(android.Manifest.permission.POST_NOTIFICATIONS), 100)
+    }
+        
         setContent {
             MaterialTheme {
                 var overlayGranted by remember { mutableStateOf(hasOverlayPermission()) }
@@ -71,16 +75,24 @@ class MainActivity : ComponentActivity() {
                         }
 
                         Button(onClick = {
-                            if (!hasOverlayPermission()) requestOverlayPermission()
-                            else {
-                                val i = Intent(this@MainActivity, PulseService::class.java).apply {
-                                    putExtra(PulseService.EXTRA_USE_SYSTEM_BOOST, systemBoostEnabled && hasWriteSettingsPermission())
-                                }
-                                if (Build.VERSION.SDK_INT >= 26) {
-                                    startForegroundService(i)
-                                } else startService(i)
-                            }
-                        }) { Text("시작") }
+    if (!hasOverlayPermission()) {
+        requestOverlayPermission()
+    } else {
+        val i = Intent(this@MainActivity, PulseService::class.java).apply {
+            putExtra(PulseService.EXTRA_USE_SYSTEM_BOOST, systemBoostEnabled && hasWriteSettingsPermission())
+        }
+        try {
+            if (Build.VERSION.SDK_INT >= 26) {
+                startForegroundService(i)
+            } else {
+                startService(i)
+            }
+        } catch (e: Exception) {
+            // ForegroundServiceStartNotAllowedException 등 발생 시 일반 서비스로 폴백
+            startService(i)
+        }
+    }
+}) { Text("시작") }
 
                         Button(onClick = {
                             stopService(Intent(this@MainActivity, PulseService::class.java))

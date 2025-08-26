@@ -35,22 +35,12 @@ object SystemBrightnessModulator {
     }
 
     private fun currentBrightness01(ctx: Context): Float {
-        // Android 12L+ 일부 기기에서 Display.brightnessInfo 제공
-        if (Build.VERSION.SDK_INT >= 30) {
-            val dm = ctx.getSystemService(DisplayManager::class.java)
-            val d: Display? = dm?.getDisplay(Display.DEFAULT_DISPLAY)
-            val info = d?.brightnessInfo
-            if (info != null) {
-                val min = info.brightnessMinimum.coerceAtMost(info.brightnessMaximum - 0.001f)
-                val max = info.brightnessMaximum
-                val cur = info.brightness
-                return ((cur - min) / (max - min)).coerceIn(0f, 1f)
-            }
-        }
-        // fallback: 시스템 값(0~255)을 0~1로
+        // 시스템 밝기 값(0~255)을 0~1 범위로 변환
         return try {
             val v = Settings.System.getInt(ctx.contentResolver, Settings.System.SCREEN_BRIGHTNESS, 128)
             (v / 255f).coerceIn(0f, 1f)
-        } catch (_: Throwable) { 0.5f }
+        } catch (_: Throwable) {
+            0.5f
+        }
     }
 }

@@ -59,13 +59,21 @@ class PulseService : Service() {
     }
 
     override fun onCreate() {
-        super.onCreate()
-        power = getSystemService(Context.POWER_SERVICE) as PowerManager
-        keyguard = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+    super.onCreate()
+    power = getSystemService(Context.POWER_SERVICE) as PowerManager
+    keyguard = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+
+    try {
         startForeground(NOTIF_ID, buildNotification())
-        registerReceivers()
-        setupOverlay()
+    } catch (_: SecurityException) {
+        // POST_NOTIFICATIONS 미허용 등으로 FGS 불가 → 일반 서비스로 계속
+    } catch (_: IllegalStateException) {
+        // OS가 FGS 시작을 허용하지 않는 상황 → 일반 서비스로 계속
     }
+
+    registerReceivers()
+    setupOverlay()
+}
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         useSystemBoost = intent?.getBooleanExtra(EXTRA_USE_SYSTEM_BOOST, false) == true

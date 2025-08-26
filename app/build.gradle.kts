@@ -1,7 +1,7 @@
 plugins {
     id("com.android.application")
     kotlin("android")
-  
+    // Kotlin 2.0에서 Compose 필수 플러그인
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
@@ -27,19 +27,15 @@ android {
         }
     }
 
-    buildFeatures {
-        compose = true
-    }
+    buildFeatures { compose = true }
 
+    // Kotlin 2.0 + Compose 플러그인 사용 시 composeOptions 불필요
+    kotlinOptions { jvmTarget = "17" }
+
+    // 자바 소스가 있다면 17로 빌드
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
-    }
-codex/enable-android.useandroidx-property-ae4gx2
-
-main
-    kotlinOptions {
-        jvmTarget = "17"
     }
 
     packaging {

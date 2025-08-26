@@ -35,9 +35,8 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-codex/enable-android.useandroidx-property-0lm5l0
-
-main
+ codex/enable-android.useandroidx-property-gi3c3g
+ main
     kotlinOptions {
         jvmTarget = "17"
     }

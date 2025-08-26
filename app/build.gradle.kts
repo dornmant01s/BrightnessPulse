@@ -31,9 +31,14 @@ android {
         compose = true
     }
 
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
 
-
-    kotlinOptions { jvmTarget = "17" }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
 
     packaging {
         resources.excludes += setOf("META-INF/AL2.0", "META-INF/LGPL2.1")
@@ -47,4 +52,3 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.core:core-ktx:1.13.1")
 }
-
